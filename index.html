@@ -14,8 +14,8 @@
 function openCvReady() {
   cv['onRuntimeInitialized']=()=>{
     let video = document.getElementById("videoInput"); // video is the id of video tag
-    video.width = 640;
-    video.height = 480;
+    video.width = 1080;
+    video.height = 1920;
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false, video:{facingMode: 'environment'}})
       .then(function(stream) {
