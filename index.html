@@ -51,7 +51,7 @@ function openCvReady() {
           let radius = circles.data32F[i * 3 + 2];
           let center = new cv.Point(x, y);
             try {
-              cv.circle(src, center, radius, [255, 0, 0, 255], 2);
+              cv.circle(src, center, (radius * 1.1), [255, 0, 0, 255], 2);
               console.log(center)
               console.log(radius)
             } catch (err) {
