@@ -42,7 +42,7 @@ function openCvReady() {
         let ksize = new cv.Size(17, 17);
         cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
 
-        let color = new cv.Scalar(255, 0, 0);
+        let color = new cv.Scalar(255, 0, 0, 1);
         let circles = new cv.Mat;
         cv.HoughCircles(dst, circles, cv.HOUGH_GRADIENT, 1.2, 100, 150, 30, 50, 400);
         for (let i = 0; i < circles.cols; ++i) {
@@ -51,7 +51,7 @@ function openCvReady() {
           let radius = circles.data32F[i * 3 + 2];
           let center = new cv.Point(x, y);
             try {
-              cv.circle(dst, center, radius, color);
+              cv.circle(src, center, radius, [255, 0, 0, 255], 2);
               console.log(center)
               console.log(radius)
             } catch (err) {
@@ -59,7 +59,7 @@ function openCvReady() {
         }
 
 
-        cv.imshow("canvasOutput", dst);
+        cv.imshow("canvasOutput", src);
         
         // schedule the next one.
         let delay = 1000 / FPS - (Date.now() - begin);
