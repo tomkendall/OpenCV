@@ -37,8 +37,8 @@ function openCvReady() {
         cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
 
         let color = new cv.Scalar(255, 0, 0);
-        let circles = new cv.Mat(video.height, video.width, cv.CV_8UC4);
-        cv.HoughCircles(dst, circles, cv.HOUGH_GRADIENT, 1.2, 100, 100, 30, 2, 400);
+        let circles = new cv.Mat;
+        cv.HoughCircles(dst, circles, cv.HOUGH_GRADIENT, 1.2, 100, 200, 30, 50, 400);
         for (let i = 0; i < circles.cols; ++i) {
           let x = circles.data32F[i * 3];
           let y = circles.data32F[i * 3 + 1];
@@ -46,8 +46,9 @@ function openCvReady() {
           let center = new cv.Point(x, y);
             try {
               cv.circle(dst, center, radius, color);
+              console.log(center)
+              console.log(radius)
             } catch (err) {
-              console.log("no circle")
             }
         }
 
