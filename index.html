@@ -13,9 +13,9 @@
 <script type="text/JavaScript">
 function openCvReady() {
   cv['onRuntimeInitialized']=()=>{
-    let video = document.getElementById("videoInput"); // video is the id of video tag
-    video.width = 1512;
-    video.height = 2016;
+    let video = document.getElementById("videoInput");
+    video.width = 800;
+    video.height = 600;
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false, video:{facingMode: 'environment'}})
       .then(function(stream) {
@@ -23,23 +23,37 @@ function openCvReady() {
       video.play();
 
     let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
-    let dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+    let dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     let cap = new cv.VideoCapture(video);
 
     const FPS = 30;
     function processVideo() {
       try {
-        // if (!streaming) {
-        //   // clean and stop
-        //   src.delete();
-        //   dst.delete();
-        //   return;
-        // }
         let begin = Date.now();
         // start processing.
         cap.read(src);
         cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+        let ksize = new cv.Size(17, 17);
+        cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+
+        let color = new cv.Scalar(255, 0, 0);
+        let circles = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+        cv.HoughCircles(dst, circles, cv.HOUGH_GRADIENT, 1.2, 100, 100, 30, 2, 400);
+        for (let i = 0; i < circles.cols; ++i) {
+          let x = circles.data32F[i * 3];
+          let y = circles.data32F[i * 3 + 1];
+          let radius = circles.data32F[i * 3 + 2];
+          let center = new cv.Point(x, y);
+            try {
+              cv.circle(dst, center, radius, color);
+            } catch (err) {
+              console.log("no circle")
+            }
+        }
+
+
         cv.imshow("canvasOutput", dst);
+        
         // schedule the next one.
         let delay = 1000 / FPS - (Date.now() - begin);
         setTimeout(processVideo, delay);
@@ -48,7 +62,7 @@ function openCvReady() {
       }
     }
 
-    // schedule the first one.
+    // schedule the first frame.
     setTimeout(processVideo, 0);
   })
   .catch(function(err) {
