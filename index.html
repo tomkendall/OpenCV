@@ -14,10 +14,16 @@
 function openCvReady() {
   cv['onRuntimeInitialized']=()=>{
     let video = document.getElementById("videoInput");
-    video.width = 800;
-    video.height = 600;
+    if( /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+      video.width = 600;
+      video.height = 800;
+    } else {
+      video.width = 800;
+      video.height = 600;
+    }
+
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false, video:{facingMode: 'environment'}})
+      .getUserMedia({ audio: false, video:{facingMode: 'environment'}})
       .then(function(stream) {
       video.srcObject = stream;
       video.play();
