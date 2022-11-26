@@ -29,7 +29,6 @@ function openCvReady() {
           let ksize = new cv.Size(17, 17);
           cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
   
-          let color = new cv.Scalar(255, 0, 0, 1);
           let circles = new cv.Mat;
           cv.HoughCircles(dst, circles, cv.HOUGH_GRADIENT, 1.2, 100, 150, 30, 50, 400);
           for (let i = 0; i < circles.cols; ++i) {
