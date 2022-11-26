@@ -60,7 +60,7 @@ function openCvReady() {
       setTimeout(processVideo, 0);
     })
     .catch(function(err) {
-      console.log("An error occurred! " + err);
+      console.log("Oh no! An error occurred! " + err);
     });
   
   
